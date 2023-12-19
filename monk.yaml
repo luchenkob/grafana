@@ -1,0 +1,93 @@
+namespace: grafana
+
+grafana:
+  defines: runnable
+  inherits: monitoring/grafana
+  metadata:
+    name: grafana
+    description: >-
+      The main Grafana service, an open-source platform for monitoring and
+      observability.
+    icon: https://grafana.com/static/assets/internal/grafana_logo-web-white-text.svg
+  variables:
+    admin-password:
+      type: string
+      value: admin
+      description: ''
+    admin-user:
+      type: string
+      value: admin
+      description: ''
+    anonymous:
+      type: string
+      value: 'true'
+      description: ''
+    anonymous_role:
+      type: string
+      value: Viewer
+      description: ''
+    install_plugins:
+      type: string
+      value: grafana-clock-panel,grafana-simple-json-datasource
+      description: ''
+    prometheusHost:
+      type: string
+      value: connection-hostname("prometheus")
+      description: ''
+
+mysql:
+  defines: runnable
+  inherits: monk-mysql/db
+  metadata:
+    name: mysql
+    description: MySQL database service required by Grafana for data storage.
+    icon: https://labs.mysql.com/common/logos/mysql-logo.svg?v2
+  variables:
+    image_tag:
+      type: string
+      value: latest
+      description: ''
+    monk_mysql_database:
+      type: string
+      value: monk
+      description: ''
+    monk_mysql_password:
+      type: string
+      value: monk
+      description: ''
+    monk_mysql_root_password:
+      type: string
+      value: monk
+      description: ''
+    monk_mysql_user:
+      type: string
+      value: monk
+      description: ''
+
+postgresql:
+  defines: runnable
+  inherits: postgresql/db
+  metadata:
+    name: postgresql
+    description: PostgreSQL database service required by Grafana for data storage.
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
+  variables:
+    db_name:
+      type: string
+      value: monk
+      description: ''
+    db_pass:
+      type: string
+      value: adminpassword
+      description: ''
+    db_user:
+      type: string
+      value: monk
+      description: ''
+
+stack:
+  defines: group
+  members:
+    - grafana/grafana
+    - grafana/mysql
+    - grafana/postgresql
